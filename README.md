@@ -1,24 +1,19 @@
-This is a [Next.js](https://nextjs.org/) + [Shadcn](https://ui.shadcn.com/) project template.
+# react-notion-next
 
-## Getting Started
+Fast and accurate React renderer for Notion using next.js server component.
 
-First, run the development server:
+-   Full Typescript support
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+-   React Server Component [ full points on SEO benchmarks ]
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Thanks to awesome projects
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`react-notion-next` won't be possible if we didn't had these awesome projects and people:
 
-## How to add components
+-   [react-notion-x](https://github.com/NotionX/react-notion-x)
+    -   We heavily use `notion-client` and `notion-type`
+    -   We also use the test suite that this project uses to verify and test notion components
 
-[See the list of componenets from shadcn/ui](https://ui.shadcn.com/docs/components/accordion)
+### License
 
+GPL-3.0 license
