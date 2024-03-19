@@ -2,12 +2,12 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "prettier.printWidth": 120,
+  "prettier.tabWidth": 4,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
   "prettier.semi": false,
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "cSpell.words": [],
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -21,7 +21,7 @@
   "cSpell.customDictionaries": {
     "custom-dictionary-workspace": {
       "name": "custom-dictionary-workspace",
-      "path": "${workspaceFolder:nextjs-vscode-devcontainer}/.cspell/custom-dictionary-workspace.txt",
+      "path": "${workspaceFolder}/.cspell/custom-dictionary-workspace.txt",
       "addWords": true,
       "scope": "workspace"
     }

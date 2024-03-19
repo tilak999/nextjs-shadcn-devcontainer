@@ -1,9 +1,10 @@
+import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Nunito_Sans } from "next/font/google"
 import React from "react"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] })
+const nunito = Nunito_Sans({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<React.PropsWithChildren>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn(nunito.className, "dark")}>
+        {children}
+      </body>
     </html>
   )
 }
