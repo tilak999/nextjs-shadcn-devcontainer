@@ -19,8 +19,14 @@ function Banner({ pageBlock }: { pageBlock: Block }) {
         <>
             <div className="h-11"></div>
             {coverImage ? (
-                <div className="h-60 w-full overflow-hidden" aria-description="banner image of the page">
-                    <img src={defaultMapImageUrl(coverImage, pageBlock)} className="w-full" alt="cover" />
+                <div className="h-60 flex items-center overflow-hidden" aria-description="banner image of the page">
+                    <Image
+                        src={defaultMapImageUrl(coverImage, pageBlock)}
+                        className="w-full"
+                        alt="cover"
+                        width={1024}
+                        height={1024}
+                    />
                 </div>
             ) : (
                 <div className="h-28"></div>

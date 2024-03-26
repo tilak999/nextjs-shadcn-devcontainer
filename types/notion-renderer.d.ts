@@ -1,10 +1,10 @@
-import type { Block, ExtendedRecordMap } from "notion-types"
+import type { Block, RecordMap } from "notion-types"
 
 export interface BlockProps {
-    recordMap?: ExtendedRecordMap
+    recordMap?: RecordMap
     blockMap: BlockProvider
     blockData: Block
-    RenderBlock: ({ blockId: string }) => Promise<JSX.Element>
+    RenderBlock: ({ blockId, block }: { blockId?: string, block?: Block }) => Promise<JSX.Element>
 }
 
 export type BlockComponent = (blockProps: BlockProps) => any

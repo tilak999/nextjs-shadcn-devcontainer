@@ -7,14 +7,14 @@ const indexPage = "067dd719-a912-471e-a9a3-ac10710e7fdf"
 const notion = new NotionAPI()
 
 const getPage = cache(async (pageId: string) => {
-    const data = await notion.getPage(pageId.replaceAll("-", ""))
+    const data = await notion.getPageRaw(pageId.replaceAll("-", ""))
     return data
 })
 
 export default async function Page({ params }: { params: { pageId: string } }) {
     const pageId = params.pageId || indexPage
     const data = await getPage(params.pageId || pageId)
-    const pageBlock = data.block[pageId].value
+    const pageBlock = data.recordMap.block[pageId].value
 
     return (
         <main className="w-full h-screen">

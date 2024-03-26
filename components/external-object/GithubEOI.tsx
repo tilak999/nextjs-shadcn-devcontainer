@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Block } from "notion-types"
 
 function GithubIcon({ className }: { className?: string }) {

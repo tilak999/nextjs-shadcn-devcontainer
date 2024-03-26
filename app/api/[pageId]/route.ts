@@ -5,7 +5,7 @@ const notion = new NotionAPI()
 
 export async function GET(request: NextRequest, { params }: { params: { pageId: string } }) {
     const uuid = params.pageId || `067dd719-a912-471e-a9a3-ac10710e7fdf`
-    const recordMap = await notion.getPage(uuid.replaceAll('-', ''))
+    const recordMap = await notion.getPageRaw(uuid.replaceAll('-', ''))
     return NextResponse.json(recordMap)
 }
 

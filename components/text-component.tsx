@@ -1,5 +1,7 @@
+import { colors } from "@/components/constants/notion-colors"
 import { BlockProps } from "@/types/notion-renderer"
 import { SubDecoration } from "notion-types"
+import { Fragment } from "react"
 
 export default function TextComponent({ blockData, recordMap, blockMap, RenderBlock }: BlockProps) {
     // if there are not modifiers return 1st item of array
@@ -7,8 +9,8 @@ export default function TextComponent({ blockData, recordMap, blockMap, RenderBl
 
     return (
         <>
-            {title.map((t: string[]) => {
-                if (t.length == 1) return t[0]
+            {title.map((t: string[], i: number) => {
+                if (t.length == 1) return <Fragment key={i}>{t[0]}</Fragment>
 
                 let text = t[0]
                 const actions = t[1]
@@ -18,7 +20,7 @@ export default function TextComponent({ blockData, recordMap, blockMap, RenderBl
                         text = inlineRender({ subDecoration, text, RenderBlock })
                     }
                 }
-                return text
+                return <Fragment key={i}>{text}</Fragment>
             })}
         </>
     )
@@ -38,9 +40,20 @@ function inlineRender({ subDecoration, text, RenderBlock }: InlineRenderProps) {
             return <i>{text}</i>
         case "b":
             return <b>{text}</b>
+        case "_":
+            return <u>{text}</u>
+        case "s":
+            return <s>{text}</s>
+        case "c":
+            return <code className="not-prose inline bg-gray-800 px-2 py-1 rounded text-notion-red">{text}</code>
         case "eoi":
             return <RenderBlock blockId={subDecoration[1]} />
+        case "p":
+            return <RenderBlock blockId={subDecoration[1]} />
+        case "h":
+            return <span className={colors[subDecoration[1]]}>{text}</span>
         default:
+            console.log(`${subDecoration} => ${text}`)
             return text
     }
 }

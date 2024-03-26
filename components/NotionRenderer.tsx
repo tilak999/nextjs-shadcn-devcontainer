@@ -1,35 +1,42 @@
 import { mergeBlockComponentMap } from "@/lib/NotionHelper"
 import { BlockProps, BlockProvider } from "@/types/notion-renderer"
 import { NotionAPI } from "notion-client"
-import { Block, ExtendedRecordMap } from "notion-types"
+import { Block, RecordMap } from "notion-types"
 import ErrorBlock from "./ErrorBlock"
 
 interface PropType {
     pageId: string
     blockProviders?: BlockProvider
-    fetchRecordMap?: (pageId: string) => ExtendedRecordMap
+    fetchRecordMap?: (pageId: string) => RecordMap
 }
+
+const notion = new NotionAPI()
 
 export default async function NotionRenderer({ pageId, blockProviders, fetchRecordMap }: PropType) {
     const blockMap = mergeBlockComponentMap(blockProviders)
-    const notion = new NotionAPI()
     const getRecordMap = async (pageId: string) => {
-        if (fetchRecordMap) return await fetchRecordMap(pageId)
-        else return await notion.getPage(pageId)
+        const request = fetchRecordMap != null ? fetchRecordMap(pageId) : (await notion.getPageRaw(pageId)).recordMap
+        const recordMap = await request
+        console.debug(`Total payload size for page [${pageId}]: ${JSON.stringify(recordMap).length}`)
+        return recordMap
     }
 
-    const getBlockById = async (blockId: string, recordMap?: ExtendedRecordMap) => {
-        if (recordMap && recordMap.block[blockId]) return recordMap.block[blockId].value
-        else fetchRecordMap && (await getBlockById(blockId, await fetchRecordMap(blockId)))
+    const getBlockById = async (blockId: string, recordMap?: RecordMap): Promise<Block> => {
+        if (recordMap && recordMap.block[blockId]) {
+            return recordMap.block[blockId].value
+        } else {
+            const record = await getRecordMap(blockId)
+            return await getBlockById(blockId, record)
+        }
     }
 
     try {
         const recordMap = await getRecordMap(pageId)
         const content = recordMap.block[pageId].value.content
         if (content) {
-            const x = content.map(async (id: string) => await getBlockById(id, recordMap))
-            const contents = await Promise.all(x)
-            return contents.map((block, i) => {
+            const promises = content.map(async (id: string) => await getBlockById(id, recordMap))
+            const contentBlocks = await Promise.all(promises)
+            return contentBlocks.map((block, i) => {
                 return (
                     <RenderPage
                         getBlockById={getBlockById}
@@ -47,19 +54,19 @@ export default async function NotionRenderer({ pageId, blockProviders, fetchReco
 }
 
 interface RenderPageProps extends Partial<BlockProps> {
-    getBlockById: (blockId: string, recordMap?: ExtendedRecordMap) => Promise<Block | undefined>
+    getBlockById: (blockId: string, recordMap?: RecordMap) => Promise<Block>
 }
 
 export function RenderPage({ blockMap, blockData, recordMap, getBlockById }: RenderPageProps) {
-    const RenderBlock = async ({ blockId }: { blockId: string }) => {
+    const RenderBlock = async ({ blockId, block }: { blockId?: string; block?: Block }) => {
         try {
-            const block = await getBlockById(blockId, recordMap)
-            if (block)
+            const blockData = block || (blockId && (await getBlockById(blockId, recordMap)))
+            if (blockData)
                 return (
                     <RenderPage
                         blockMap={blockMap}
                         recordMap={recordMap}
-                        blockData={block}
+                        blockData={blockData}
                         getBlockById={getBlockById}
                         RenderBlock={RenderBlock}
                     />
