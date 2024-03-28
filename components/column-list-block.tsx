@@ -5,7 +5,7 @@ export default function ColumnListBlock({ blockData, recordMap, RenderBlock }: B
     return (
         <div className="flex flex-row">
             {blockData.content?.map((id: string) => (
-                <div key={id} className="px-2 flex-grow">
+                <div key={id} className="px-2 flex-grow-0 w-full">
                     {recordMap?.block[id].value.content?.map((id) => (
                         <RenderBlock key={id} blockId={id} />
                     ))}

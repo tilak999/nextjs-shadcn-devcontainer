@@ -1,5 +1,5 @@
 import { mergeBlockComponentMap } from "@/lib/NotionHelper"
-import { BlockProps, BlockProvider } from "@/types/notion-renderer"
+import { BlockProps, BlockProvider, RenderBlockProps } from "@/types/notion-renderer"
 import { NotionAPI } from "notion-client"
 import { Block, RecordMap } from "notion-types"
 import ErrorBlock from "./ErrorBlock"
@@ -55,10 +55,11 @@ export default async function NotionRenderer({ pageId, blockProviders, fetchReco
 
 interface RenderPageProps extends Partial<BlockProps> {
     getBlockById: (blockId: string, recordMap?: RecordMap) => Promise<Block>
+    props?: any
 }
 
-export function RenderPage({ blockMap, blockData, recordMap, getBlockById }: RenderPageProps) {
-    const RenderBlock = async ({ blockId, block }: { blockId?: string; block?: Block }) => {
+export function RenderPage({ blockMap, blockData, recordMap, getBlockById, props }: RenderPageProps) {
+    const RenderBlock = async ({ blockId, block, props }: RenderBlockProps) => {
         try {
             const blockData = block || (blockId && (await getBlockById(blockId, recordMap)))
             if (blockData)
@@ -69,6 +70,7 @@ export function RenderPage({ blockMap, blockData, recordMap, getBlockById }: Ren
                         blockData={blockData}
                         getBlockById={getBlockById}
                         RenderBlock={RenderBlock}
+                        props={props}
                     />
                 )
         } catch (e) {
@@ -79,10 +81,9 @@ export function RenderPage({ blockMap, blockData, recordMap, getBlockById }: Ren
 
     if (blockMap && blockData && blockData.type in blockMap) {
         for (const NotionBlockComponent of blockMap[blockData.type]) {
-            const component = NotionBlockComponent({ blockData, blockMap, recordMap, RenderBlock })
+            const component = NotionBlockComponent({ blockData, blockMap, recordMap, RenderBlock, ...props })
             if (component) return component
         }
-    } else {
-        return <ErrorBlock blockData={blockData} />
     }
+    return <ErrorBlock blockData={blockData} />
 }

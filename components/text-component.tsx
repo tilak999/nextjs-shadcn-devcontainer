@@ -3,33 +3,34 @@ import { BlockProps } from "@/types/notion-renderer"
 import { SubDecoration } from "notion-types"
 import { Fragment } from "react"
 
-export default function TextComponent({ blockData, recordMap, blockMap, RenderBlock }: BlockProps) {
+export default function TextComponent({ blockData, RenderBlock }: Pick<BlockProps, "blockData" | "RenderBlock">) {
     // if there are not modifiers return 1st item of array
     const title = blockData.properties.title
 
     return (
         <>
-            {title.map((t: string[], i: number) => {
-                if (t.length == 1) return <Fragment key={i}>{t[0]}</Fragment>
+            {Array.isArray(title)
+                ? title.map((t: string[], i: number) => {
+                      if (t.length == 1) return <Fragment key={i}>{t[0]}</Fragment>
 
-                let text = t[0]
-                const actions = t[1]
+                      let text = t[0]
+                      const actions = t[1]
 
-                if (Array.isArray(actions)) {
-                    for (const subDecoration of actions) {
-                        text = inlineRender({ subDecoration, text, RenderBlock })
-                    }
-                }
-                return <Fragment key={i}>{text}</Fragment>
-            })}
+                      if (Array.isArray(actions)) {
+                          for (const subDecoration of actions) {
+                              text = inlineRender({ subDecoration, text, RenderBlock })
+                          }
+                      }
+                      return <Fragment key={i}>{text}</Fragment>
+                  })
+                : title}
         </>
     )
 }
 
-interface InlineRenderProps {
+interface InlineRenderProps extends Pick<BlockProps, "RenderBlock"> {
     subDecoration: SubDecoration
     text: any
-    RenderBlock: any
 }
 
 function inlineRender({ subDecoration, text, RenderBlock }: InlineRenderProps) {
@@ -47,7 +48,7 @@ function inlineRender({ subDecoration, text, RenderBlock }: InlineRenderProps) {
         case "c":
             return <code className="not-prose inline bg-gray-800 px-2 py-1 rounded text-notion-red">{text}</code>
         case "eoi":
-            return <RenderBlock blockId={subDecoration[1]} />
+            return <RenderBlock blockId={subDecoration[1]} props={{ inline: true }} />
         case "p":
             return <RenderBlock blockId={subDecoration[1]} />
         case "h":

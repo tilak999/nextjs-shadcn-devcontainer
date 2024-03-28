@@ -7,11 +7,7 @@ export default function BookmarkBlock(props: BlockProps) {
     const { bookmark_cover } = props.blockData.format
 
     return (
-        <a
-            className="no-underline border rounded flex my-3 border-gray-700 dark:hover:bg-slate-900"
-            href={link.toString()}
-            target="_blank"
-        >
+        <a className="no-underline border rounded flex my-3 hover:bg-accent/50" href={link.toString()} target="_blank">
             <div className="p-4">
                 <div className="text-sm font-semibold">{title}</div>
                 <p className="text-gray-400 text-sm my-1 max-h-11 overflow-hidden">{description}</p>

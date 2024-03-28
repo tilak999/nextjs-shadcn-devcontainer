@@ -5,6 +5,7 @@ import CalloutBlock from "@/components/callout-block"
 import ColumnListBlock from "@/components/column-list-block"
 import GithubEOI from "@/components/external-object/GithubEOI"
 import HeaderBlock from "@/components/header-block"
+import ImageBlock from "@/components/image-block"
 import PageBlock from "@/components/page-block"
 import QuoteBlock from "@/components/quote-block"
 import TextBlock from "@/components/text-block"
@@ -29,5 +30,6 @@ export const blockProviders: BlockProvider = {
     "quote": [QuoteBlock],
     "bookmark": [BookmarkBlock],
     "tweet": [TweetBlock],
-    "toggle": [ToggleBlock]
+    "toggle": [ToggleBlock],
+    "image": [ImageBlock]
 }
