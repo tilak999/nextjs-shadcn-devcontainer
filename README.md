@@ -1,5 +1,10 @@
 This is a [Next.js](https://nextjs.org/) + [Shadcn](https://ui.shadcn.com/) project template.
 
+## Things that are included in the dev container
+- Uses `docker-in-docker` so docker command is available from within the devcontainer.
+- Shadcn setup with tailwind css.
+- Some recommended plugins.
+
 ## Getting Started
 
 First, run the development server:
@@ -22,3 +27,10 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 [See the list of componenets from shadcn/ui](https://ui.shadcn.com/docs/components/accordion)
 
+
+## Want to change something 
+
+you will find the base docker image and devcontainer config file in `.devcontainer` directory
+
+## LICENSE
+MIT
