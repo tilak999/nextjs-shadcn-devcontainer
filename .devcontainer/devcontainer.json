@@ -1,5 +1,5 @@
 {
-  "name": "typetale-dev",
+  "name": "nextjs-node-dev",
   "build": {
     "dockerfile": "Dockerfile"
   },
